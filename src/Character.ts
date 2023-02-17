@@ -58,7 +58,7 @@ export default class Character implements Fighter {
     return { ...this._energy };
   }
 
-  attack(enemy: Fighter | SimpleFighter): void {
+  attack(enemy: SimpleFighter): void {
     enemy.receiveDamage(this.strength);
   }
 
@@ -74,7 +74,7 @@ export default class Character implements Fighter {
     this._lifePoints = this._maxLifePoints;
   }
 
-  special?(enemy: Fighter): void {
+  special?(enemy: SimpleFighter): void {
     const damage = this.strength + (0.5 * this._energy.amount);
     this._energy.amount *= 0.5; 
     enemy.receiveDamage(damage);
