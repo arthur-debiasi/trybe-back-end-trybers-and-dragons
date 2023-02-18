@@ -1,33 +1,32 @@
-import { Mage, Warrior } from './Archetypes';
-import { PVE, PVP } from './Battle';
+import Battle, { PVE, PVP } from './Battle';
 import Character from './Character';
+import Dragon from './Dragon';
 import Monster from './Monster';
 
-const orc = new Warrior('joes');
-const mage = new Mage('bruxo');
-const char = new Character('eu');
-const char2 = new Character('ele');
-const monster = new Monster();
-const monster2 = new Monster();
-const monster3 = new Monster();
+const player1 = new Character('Debi');
+const player2 = new Character('Oik');
+const player3 = new Character('Valdo');
+const monster1 = new Monster();
+const monster2 = new Dragon();
+const pvp = new PVP(player2, player3);
+const pve = new PVE(player1, [monster1, monster2]);
 
-const pvp = new PVP(char, char2);
-const pve = new PVE(char2, [monster, monster2, monster3]);
+const runBattles = (battles: Battle[]) => {
+  battles.forEach((battle) => battle.fight());
+};
 
-char2.levelUp();
-char2.levelUp();
-char2.levelUp();
-char2.levelUp();
-char2.levelUp();
-char2.levelUp();
-char2.levelUp();
-char2.levelUp();
-char2.levelUp();
-char2.levelUp();
+player1.levelUp();
+player1.levelUp();
+player1.levelUp();
+player1.levelUp();
 
-console.log(pvp.fight());
-// console.log(pve.fight());
-
-// console.log(char);
-// console.log(char2);
-// console.log(monster);
+export { 
+  player1,
+  player2,
+  player3,
+  monster1,
+  monster2,
+  pvp,
+  pve,
+  runBattles,
+};
