@@ -11,6 +11,6 @@ export default class PVP extends Battle {
       this.f1.attack(this.f2);
       this.f2.attack(this.f1);
     }
-    return this.f1.lifePoints === -1 ? 1 : -1;
+    return super.fight();
   }
 }
