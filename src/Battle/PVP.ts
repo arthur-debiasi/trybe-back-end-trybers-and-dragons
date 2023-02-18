@@ -2,12 +2,8 @@ import Fighter from '../Fighter';
 import Battle from './Battle';
 
 export default class PVP extends Battle {
-  public f1: Fighter;
-  public f2: Fighter;
-  constructor(f1: Fighter, f2: Fighter) {
+  constructor(public f1: Fighter, public f2: Fighter) {
     super(f1);
-    this.f1 = f1;
-    this.f2 = f2;
   }
 
   fight(): number {

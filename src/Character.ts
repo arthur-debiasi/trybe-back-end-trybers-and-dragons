@@ -5,7 +5,6 @@ import Race, { Elf } from './Races';
 import getRandomInt from './utils';
 
 export default class Character implements Fighter {
-  public _name: string;
   private _race: Race;
   private _archetype: Archetypes;
   private _maxLifePoints: number;
@@ -15,11 +14,10 @@ export default class Character implements Fighter {
   private _dexterity: number;
   private _energy: Energy;
 
-  constructor(name: string) {
-    this._name = name;
+  constructor(public _name: string, CharRace = Elf, CharArch = Mage) {
     this._dexterity = getRandomInt(1, 10);
-    this._race = new Elf(name, this._dexterity);
-    this._archetype = new Mage(name);
+    this._race = new CharRace(_name, this._dexterity);
+    this._archetype = new CharArch(_name);
     this._maxLifePoints = this.race.maxLifePoints * 0.5;
     this._lifePoints = this._maxLifePoints;
     this._strength = getRandomInt(1, 10);
@@ -61,6 +59,19 @@ export default class Character implements Fighter {
   attack(enemy: SimpleFighter): void {
     enemy.receiveDamage(this.strength);
   }
+  
+  special?(enemy: SimpleFighter): void {
+    const damage = this.strength + (0.5 * this._energy.amount);
+    this._energy.amount *= 0.5; 
+    enemy.receiveDamage(damage);
+  }
+  
+  receiveDamage(attackPoints: number): number {
+    const damage = attackPoints - this.defense;
+    this._lifePoints -= damage > 0 ? damage : 1;
+    if (this.lifePoints <= 0) this._lifePoints = -1;
+    return this.lifePoints;
+  }
 
   levelUp(): void {
     this._strength += getRandomInt(1, 10);
@@ -72,21 +83,5 @@ export default class Character implements Fighter {
       this._maxLifePoints = this.race.maxLifePoints;
     }
     this._lifePoints = this._maxLifePoints;
-  }
-
-  special?(enemy: SimpleFighter): void {
-    const damage = this.strength + (0.5 * this._energy.amount);
-    this._energy.amount *= 0.5; 
-    enemy.receiveDamage(damage);
-  }
-
-  receiveDamage(attackPoints: number): number {
-    const damage = attackPoints - this.defense;
-    if (damage <= 0) {
-      this._lifePoints -= 1;
-    } else {
-      this._lifePoints -= damage;
-    }
-    return this.lifePoints <= 0 ? -1 : this.lifePoints;
   }
 }

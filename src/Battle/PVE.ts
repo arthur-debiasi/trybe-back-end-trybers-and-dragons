@@ -2,25 +2,20 @@ import Fighter, { SimpleFighter } from '../Fighter';
 import Battle from './Battle';
 
 export default class PVE extends Battle {
-  public character: Fighter;
-  public environment: SimpleFighter[];
-  constructor(character: Fighter, environment: SimpleFighter []) {
+  constructor(public character: Fighter, public environment: SimpleFighter[]) {
     super(character);
-    this.character = character;
-    this.environment = environment;
   }
 
-  fight(): number {
-    let enemyIndex = 0;
+  override fight(): number {
     while (
-      this.character.lifePoints !== -1
-        && this.environment.every((e) => e.lifePoints !== -1)
+      this.environment.some(({ lifePoints }) => lifePoints > 0)
     ) {
-      const enemy = this.environment[enemyIndex];
-      this.character.attack(enemy);
-      enemy.attack(this.character);
-      enemyIndex = enemyIndex === this.environment.length ? 0 : enemyIndex + 1;
+      this.environment.forEach((e) => {
+        this.character.attack(e);
+        e.attack(this.character);
+        if (this.character.lifePoints > 0) return -1;
+      });
     }
-    return this.character.lifePoints === -1 ? 1 : -1;
+    return super.fight();
   }
 }
